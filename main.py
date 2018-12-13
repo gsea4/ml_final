@@ -90,7 +90,7 @@ dataset2 = dataset2.dropna()
 
 data = dataset2.drop('song.hotttnesss', axis=1)
 
-data = dataset2[['artist.hotttnesss', 'tempo', 'duration', 'loudness', 'longitude', 'latitude', 'beats_start']]
+data = dataset2[['artist.hotttnesss', 'tempo', 'duration', 'loudness', 'longitude', 'latitude', 'beats_start', 'familiarity']]
 labels = dataset2['song.hotttnesss']
 labels = labels.values
 labels[labels >= 0.5] = 1
@@ -109,8 +109,8 @@ from xgboost import XGBClassifier
 
 cv = StratifiedKFold(n_splits=6)
 clf = GaussianNB()
-clf = svm.SVC(kernel='linear',probability=False)
-clf = RandomForestClassifier(n_estimators=40, max_depth=5)
+clf = svm.SVC(kernel='rbf',probability=True)
+clf = RandomForestClassifier(n_estimators=10, max_depth=4)
 clf.fit(X_train, y_train)
 clf.score(X_test, y_test)
 pred = clf.predict(X_test)
@@ -176,8 +176,8 @@ X_test = tf.keras.utils.normalize(X_test, axis=1)
 
 model = tf.keras.models.Sequential()
 model.add(tf.keras.layers.Flatten())
-model.add(tf.keras.layers.Dense(5, activation=tf.nn.relu))
-model.add(tf.keras.layers.Dense(5, activation=tf.nn.relu))
+model.add(tf.keras.layers.Dense(2, activation=tf.nn.softmax))
+model.add(tf.keras.layers.Dense(2, activation=tf.nn.softmax))
 model.add(tf.keras.layers.Dense(2, activation=tf.nn.softmax))
 
 model.compile(optimizer='adam',
